@@ -6,6 +6,10 @@ import requests
 import shutil
 from sys import argv, exit
 from urlparse import urlparse
+import commands
+
+#Holds the path for the SSL cert. Prevents wget errors
+cert_path = commands.getstatusoutput('echo $SSL_CERT_FILE')[1] 
 
 def worldEngine(url, href, src, option, resp, case):
     baseURL =  "http://" + urlparse(url).hostname 
@@ -96,7 +100,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    resp = requests.get(args.url)
+    resp = requests.get(args.url, verify= cert_path)
     if resp.status_code >= 400:
         print "!! Sorry, site / wiki is not reachable, error occurred. !!"
         exit()
